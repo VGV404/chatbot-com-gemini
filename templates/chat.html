@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Chatbot de FAQ</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+</head>
+<body>
+    <div class="chat-container">
+        <div class="header">
+            <h3>Chatbot de FAQ - Usuário: {{ username }}</h3>
+            <a href="{{ url_for('logoff') }}">Logoff</a>
+        </div>
+
+        <div class="chat-box" id="chat-box">
+            <div class="message bot-message">Olá, {{ username }}! Estou pronto para responder perguntas com base na nossa base de FAQ.</div>
+        </div>
+        
+        <div class="input-area">
+            <input type="text" id="user-input" placeholder="Digite sua pergunta..." onkeypress="if(event.keyCode == 13) sendMessage('{{ url_for('chat') }}')">
+            <button onclick="sendMessage('{{url_for('chat')}}')">Enviar</button>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+</body>
+</html>

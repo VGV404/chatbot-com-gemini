@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Chatbot FAQ</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Painel de Administração - {{ session['username'] }}</h1>
+            <a href="{{ url_for('logoff') }}">Logoff</a>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+            <div class="flash-message {{ category }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <h2>Configurações do Sistema</h2>
+        
+        <h3>1. Cadastro de Usuários</h3>
+        <form method="POST" action="{{ url_for('register_user') }}">
+            <label for="new_username">Novo Usuário:</label>
+            <input type="text" id="new_username" name="new_username" required>
+            
+            <label for="new_password">Senha:</label>
+            <input type="password" id="new_password" name="new_password" required>
+            
+            <label for="new_role">Função:</label>
+            <select id="new_role" name="new_role" required style="margin-bottom: 20px;">
+                <option value="user">Usuário (user)</option>
+                <option value="adm">Administrador (adm)</option>
+            </select>
+            
+            <button type="submit">Cadastrar Usuário</button>
+        </form>
+
+        <h4 style="margin-top: 30px;">Usuários Atuais (SQLite):</h4>
+        <table class="user-list">
+            <thead>
+                <tr><th>Usuário</th><th>Função</th></tr>
+            </thead>
+            <tbody>
+                {% for username, role in usuarios %}
+                <tr>
+                    <td>{{ username }}</td>
+                    <td>{{ role.upper() }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <br>
+        
+        <h3 style="margin-top: 30px;">2. Atualização do FAQ</h3>
+        <form method="POST" action="{{ url_for('upload_file') }}" enctype="multipart/form-data">
+            <label for="faq_file">Selecione o novo FAQ (.txt):</label>
+            <input type="file" id="faq_file" name="faq_file" accept=".txt" required>
+            
+            <button type="submit"">Upload e Atualizar FAQ</button>
+        </form>
+        <p style="margin-top: 10px; font-size: small;">O upload do arquivo sobrescreve o `faq_contexto.txt` e recarrega a base do chatbot.</p>
+        
+        <hr style="margin-top: 30px;">
+        
+        <h3>3. Testar Chatbot</h3>
+        <a href="{{ url_for('user_chat') }}" style="background-color: #007bff; color: white; padding: 10px 15px; border-radius: 4px; text-decoration: none; display: inline-block;">Ir para a Interface de Chat</a>
+    </div>
+</body>
+</html>
